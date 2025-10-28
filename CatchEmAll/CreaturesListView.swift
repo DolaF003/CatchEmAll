@@ -8,21 +8,27 @@
 import SwiftUI
 
 struct CreaturesListView: View {
-    var creatures = ["Pikachu", "Squirtle", "Charzard", "Snorlax"]
+    @State var creatures = Creatures()
     var body: some View {
         NavigationStack {
-            List() {
-                ForEach(creatures, id: \.self) { creature in
-                    Text(creature)
+            List(creatures.creaturesArray, id: \.self) { creature in
+                NavigationLink {
+                    DetailView(creature: creature)
+                } label: {
+                    Text(creature.name.capitalized)
                         .font(.title2)
                 }
             }
             .listStyle(.plain)
             .navigationTitle("Pokemon")
         }
+        .task {
+            await creatures.getData()
+        }
     }
 }
 
-#Preview {
-    CreaturesListView()
+    
+    #Preview {
+        CreaturesListView()
 }
