@@ -54,4 +54,12 @@ class Creatures {
             isLoading = false
         }
     }
+    
+    func loadAll() async {
+        Task {@MainActor in
+            guard urlString.hasPrefix("http") else {return}
+            await getData() //get next page of data
+            await loadAll() //call loadALL again - will stop when all pages are retrieved
+        }
+    }
 }
